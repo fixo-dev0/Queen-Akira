@@ -1,6 +1,4 @@
-// === menu.js (button menu version) ===
-const { sendButtonMenu } = require('../lib/buttons');
-
+// === menu.js ===
 const NEWSLETTER_JID = "120363409660898486@newsletter";
 const NEWSLETTER_NAME = "𝙌𝙪𝙚𝙚𝙣 𝘼𝙠𝙞𝙧𝙖 🕊️";
 const menuImage = 'https://files.catbox.moe/kwwaun.png';
@@ -94,20 +92,30 @@ const mainCaption = `╭────────────────
 │ 👑 ᴏᴡɴᴇʀ : *${ownerName}*
 │ 📦 ᴠᴇʀsɪᴏɴ : *${version}*
 │ 📡 ᴘʟᴀᴛғᴏʀᴍ : *${platform}*
-╰────────────────
-👇 ᴛᴀᴘ ᴀ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴠɪᴇᴡ ᴛʜᴀᴛ ᴍᴇɴᴜ`;
+╰────────────────`;
+
+function buildFullMenuText(prefix) {
+    const sections = Object.values(CATEGORIES)
+        .map((cat) => {
+            const lines = cat.list.map((cmd) => `┃✰ ${prefix}${cmd}`).join('\n');
+            return `┏━❮ ${cat.title} ❯━┓\n${lines}\n┗━━━━━━━━━━━━━┛`;
+        })
+        .join('\n\n');
+
+    return `${mainCaption}\n\n${sections}`;
+}
 
 module.exports = {
     pattern: "menu",
-    desc: "Show all available commands as a button menu",
+    desc: "Show all available commands",
     category: "utility",
     react: "📋",
     use: ".menu",
     filename: __filename,
 
-    // Called by server.js when the user taps a button that starts with "menu_"
     CATEGORIES,
     buildCategoryText,
+    buildFullMenuText,
     mainMenuButtons,
     mainCaption,
     menuImage,
@@ -117,13 +125,13 @@ module.exports = {
     execute: async (conn, message, m, { from, reply, userPrefix }) => {
         try {
             const prefix = userPrefix || ".";
-            await sendButtonMenu(conn, from, {
-                text: mainCaption,
-                footer: `Powered by ${botName}`,
-                image: menuImage,
-                buttons: mainMenuButtons(),
-                quoted: message
-            });
+            const text = buildFullMenuText(prefix);
+
+            await conn.sendMessage(
+                from,
+                { image: { url: menuImage }, caption: text },
+                { quoted: message }
+            );
         } catch (err) {
             console.error("Menu error:", err);
             reply("❌ Failed to load menu.");
