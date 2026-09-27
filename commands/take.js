@@ -37,7 +37,7 @@ module.exports = {
       const target = quotedMsg || message.message;
 
       if (!target) {
-        return await sendText("*Please reply to a sticker with take .*\n\n*Usage:* .take [author name]\n*Example:* .take QADEER-XD - MINI");
+        return await sendText("*Please reply to a sticker with take .*\n\n*Usage:* .take [author name]\n*Example:* .take QUEEN AKIRA - MINI");
       }
 
       // Detect media type
