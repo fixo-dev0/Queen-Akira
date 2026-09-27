@@ -1,3 +1,4 @@
+
 const express = require("express");
 const http = require("http");
 require("dotenv").config();
@@ -234,7 +235,7 @@ app.post("/api/pair", async (req, res) => {
             browser: Browsers.macOS("Safari"),
             connectTimeoutMs: 60000,
             keepAliveIntervalMs: 25000,
-            maxIdleTimeMs: 60000,
+            maxIdleTimeMs: 120000,
             maxRetries: 10,
             markOnlineOnConnect: true,
             emitOwnEvents: true,
@@ -587,13 +588,7 @@ async function handleMessage(conn, message, sessionId) {
                     isAdmins = participant?.admin === 'admin' || participant?.admin === 'superadmin';
                     isCreator = participant?.admin === 'superadmin';
                 }
-                
-    conn.ev.on('group-participants.update', async (update) => {
-    console.log("🔥 group-participants.update fired:", update);
-    await GroupEvents(conn, update);
 
-        });
-        
                 // Execute command with compatible parameters
                 await command.execute(conn, message, m, { 
                     args, 
@@ -944,6 +939,42 @@ function setupConnectionHandlers(conn, sessionId, io, saveCreds) {
         }
     });
 
+    // Handle group participants update (welcome/goodbye) - registered ONCE here.
+    // (Previously this was registered inside handleMessage, which added a brand-new
+    // listener on every command -> memory leak + duplicate welcome/goodbye messages.)
+    conn.ev.on('group-participants.update', async (update) => {
+        try {
+            await GroupEvents(conn, update);
+        } catch (err) {
+            console.error('❌ GroupEvents error:', err);
+        }
+    });
+
+    // Connection heartbeat - Baileys only fires connection.update:close for clean
+    // disconnects. A dropped socket with no close frame leaves the linked device shown
+    // as OFFLINE in WhatsApp while the bot code still thinks it is connected. Poll the
+    // WebSocket readyState and force a reconnect when it dies.
+    const heartbeat = setInterval(() => {
+        try {
+            if (isLoggedOut) return;
+            const ws = conn.ws;
+            if (!ws) return;
+            // 0 CONNECTING, 1 OPEN, 2 CLOSING, 3 CLOSED
+            if (ws.readyState === 2 || ws.readyState === 3) {
+                console.log(`💔 Dead socket detected for ${sessionId}, forcing reconnect...`);
+                clearInterval(heartbeat);
+                try { ws.close(); } catch (e) {}
+                if (activeConnections.has(sessionId) && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+                    reconnectAttempts++;
+                    setTimeout(() => initializeConnection(sessionId), 3000);
+                }
+            }
+        } catch (e) {}
+    }, 20000);
+    conn.ev.on("connection.update", (update) => {
+        if (update.connection === "close") clearInterval(heartbeat);
+    });
+
     // Handle messages - FIXED: Added proper message handling for all message types
     conn.ev.on("messages.upsert", async (m) => {
         try {
@@ -1089,7 +1120,7 @@ async function initializeConnection(sessionId) {
             browser: Browsers.macOS("Safari"),
             connectTimeoutMs: 60000,
             keepAliveIntervalMs: 25000,
-            maxIdleTimeMs: 60000,
+            maxIdleTimeMs: 120000,
             maxRetries: 10,
             markOnlineOnConnect: true,
             emitOwnEvents: true,
