@@ -1,4 +1,3 @@
-
 const express = require("express");
 const http = require("http");
 require("dotenv").config();
@@ -15,8 +14,6 @@ const port = process.env.PORT || 3000;
 
 const GroupEvents = require("./events/GroupEvents");
 const runtimeTracker = require('./commands/runtime');
-const { getClickedButtonId, sendButtonMenu } = require('./lib/buttons');
-const menuData = require('./commands/menu');
 
 // Middleware
 app.use(express.json());
@@ -103,7 +100,7 @@ const CHANNEL_JIDS = process.env.CHANNEL_JIDS ? process.env.CHANNEL_JIDS.split('
 let PREFIX = process.env.PREFIX || ".";
 
 // Bot configuration from environment variables
-const BOT_NAME = process.env.BOT_NAME || "QUEEN AKIRA";
+const BOT_NAME = process.env.BOT_NAME || "𝙌𝙪𝙚𝙚𝙣 𝘼𝙠𝙞𝙧𝙖";
 const OWNER_NAME = process.env.OWNER_NAME || "FIXO DEV";
 
 const MENU_IMAGE_URL = process.env.MENU_IMAGE_URL || "https://files.catbox.moe/kwwaun.png";
@@ -113,8 +110,8 @@ const REPO_LINK = process.env.REPO_LINK || "https://github.com/fixo-dev0";
 const AUTO_STATUS_SEEN = process.env.AUTO_STATUS_SEEN || "true";
 const AUTO_STATUS_REACT = process.env.AUTO_STATUS_REACT || "true";
 const AUTO_STATUS_REPLY = process.env.AUTO_STATUS_REPLY || "false";
-const AUTO_STATUS_MSG = process.env.AUTO_STATUS_MSG || "YOUR STATUS HAS BEEN SEEN BY 𝗤𝗨𝗘𝗘𝗡 𝗔𝗞𝗜𝗥𝗔 𝗠𝗜𝗡𝗜 🕊️";
-const DEV = process.env.DEV || 'FixoDev';
+const AUTO_STATUS_MSG = process.env.AUTO_STATUS_MSG || "YOUR STATUS HAS BEEN SEEN BY 𝙌𝙪𝙚𝙚𝙣 𝘼𝙠𝙞𝙧𝙖🧚‍♂️";
+const DEV = process.env.DEV || 'FIXO DEV';
 
 // Track login state globally
 let isUserLoggedIn = false;
@@ -235,7 +232,7 @@ app.post("/api/pair", async (req, res) => {
             browser: Browsers.macOS("Safari"),
             connectTimeoutMs: 60000,
             keepAliveIntervalMs: 25000,
-            maxIdleTimeMs: 120000,
+            maxIdleTimeMs: 60000,
             maxRetries: 10,
             markOnlineOnConnect: true,
             emitOwnEvents: true,
@@ -431,41 +428,6 @@ function getQuotedMessage(message) {
     };
 }
 
-// Handle taps on the button menu (menu.js) — main menu buttons and
-// each category's "🔙 BACK" button all come through here.
-async function handleMenuButtonClick(conn, message, id, sessionId) {
-    try {
-        const from = message.key.remoteJid;
-
-        if (id === 'menu_main') {
-            await sendButtonMenu(conn, from, {
-                text: menuData.mainCaption,
-                footer: 'Powered by Queen Akira Mini',
-                image: menuData.menuImage,
-                buttons: menuData.mainMenuButtons(),
-                quoted: message
-            });
-            return;
-        }
-
-        if (id.startsWith('menu_')) {
-            const key = id.replace('menu_', '');
-            const userPrefix = userPrefixes.get(sessionId) || PREFIX;
-            const text = menuData.buildCategoryText(userPrefix, key);
-            if (!text) return;
-
-            await sendButtonMenu(conn, from, {
-                text,
-                footer: 'Tap below to go back',
-                buttons: [{ id: 'menu_main', text: '🔙 BACK TO MENU' }],
-                quoted: message
-            });
-        }
-    } catch (err) {
-        console.error('❌ Menu button click failed:', err);
-    }
-}
-
 // Handle incoming messages and execute commands
 async function handleMessage(conn, message, sessionId) {
     try {
@@ -510,13 +472,6 @@ async function handleMessage(conn, message, sessionId) {
         }
 
         if (!message.message) return;
-
-        // Handle taps on native "button menu" buttons (menu.js)
-        const clickedButtonId = getClickedButtonId(message);
-        if (clickedButtonId) {
-            await handleMenuButtonClick(conn, message, clickedButtonId, sessionId);
-            return;
-        }
 
         // Get message type and text
         const messageType = getMessageType(message);
@@ -588,7 +543,13 @@ async function handleMessage(conn, message, sessionId) {
                     isAdmins = participant?.admin === 'admin' || participant?.admin === 'superadmin';
                     isCreator = participant?.admin === 'superadmin';
                 }
+                
+    conn.ev.on('group-participants.update', async (update) => {
+    console.log("🔥 group-participants.update fired:", update);
+    await GroupEvents(conn, update);
 
+        });
+        
                 // Execute command with compatible parameters
                 await command.execute(conn, message, m, { 
                     args, 
@@ -599,8 +560,7 @@ async function handleMessage(conn, message, sessionId) {
                     groupMetadata: groupMetadata,
                     sender: message.key.participant || message.key.remoteJid,
                     isAdmins: isAdmins,
-                    isCreator: isCreator,
-                    userPrefix: userPrefix
+                    isCreator: isCreator
                 });
             } catch (error) {
                 console.error(`❌ Error executing command ${commandName}:`, error);
@@ -716,7 +676,7 @@ async function handleBuiltInCommands(conn, message, commandName, args, sessionId
                     text: details,
                     contextInfo: {
                         externalAdReply: {
-                            title: "⚡𝙌𝙪𝙚𝙚𝙣 𝘼𝙠𝙞𝙧𝙖 Speed Test",
+                            title: "⚡ 𝙏𝙝𝙚 𝙏𝙚𝙘𝙝𝙓 Speed Test",
                             body: `${BOT_NAME} Performance Check`,
                             thumbnailUrl: MENU_IMAGE_URL,
                             mediaType: 1,
@@ -940,42 +900,6 @@ function setupConnectionHandlers(conn, sessionId, io, saveCreds) {
         }
     });
 
-    // Handle group participants update (welcome/goodbye) - registered ONCE here.
-    // (Previously this was registered inside handleMessage, which added a brand-new
-    // listener on every command -> memory leak + duplicate welcome/goodbye messages.)
-    conn.ev.on('group-participants.update', async (update) => {
-        try {
-            await GroupEvents(conn, update);
-        } catch (err) {
-            console.error('❌ GroupEvents error:', err);
-        }
-    });
-
-    // Connection heartbeat - Baileys only fires connection.update:close for clean
-    // disconnects. A dropped socket with no close frame leaves the linked device shown
-    // as OFFLINE in WhatsApp while the bot code still thinks it is connected. Poll the
-    // WebSocket readyState and force a reconnect when it dies.
-    const heartbeat = setInterval(() => {
-        try {
-            if (isLoggedOut) return;
-            const ws = conn.ws;
-            if (!ws) return;
-            // 0 CONNECTING, 1 OPEN, 2 CLOSING, 3 CLOSED
-            if (ws.readyState === 2 || ws.readyState === 3) {
-                console.log(`💔 Dead socket detected for ${sessionId}, forcing reconnect...`);
-                clearInterval(heartbeat);
-                try { ws.close(); } catch (e) {}
-                if (activeConnections.has(sessionId) && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-                    reconnectAttempts++;
-                    setTimeout(() => initializeConnection(sessionId), 3000);
-                }
-            }
-        } catch (e) {}
-    }, 20000);
-    conn.ev.on("connection.update", (update) => {
-        if (update.connection === "close") clearInterval(heartbeat);
-    });
-
     // Handle messages - FIXED: Added proper message handling for all message types
     conn.ev.on("messages.upsert", async (m) => {
         try {
@@ -1121,7 +1045,7 @@ async function initializeConnection(sessionId) {
             browser: Browsers.macOS("Safari"),
             connectTimeoutMs: 60000,
             keepAliveIntervalMs: 25000,
-            maxIdleTimeMs: 120000,
+            maxIdleTimeMs: 60000,
             maxRetries: 10,
             markOnlineOnConnect: true,
             emitOwnEvents: true,
