@@ -1,4 +1,4 @@
-const { downloadContentFromMessage } = require("@fixo-baileyes");
+const { downloadContentFromMessage } = require("fixo-baileys");
 const { videoToWebp, imageToWebp } = require('../lib/video-utils');
 const { Sticker, StickerTypes } = require("wa-sticker-formatter");
 const axios = require('axios');
