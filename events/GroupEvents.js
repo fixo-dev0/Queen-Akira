@@ -1,5 +1,5 @@
 // === GroupEvents.js ===
-const { isJidGroup } = require('@fixo-baileyes');
+const { isJidGroup } = require('fixo-baileys');
 const fs = require('fs');
 const path = require('path');
 
