@@ -1,4 +1,4 @@
-const { downloadContentFromMessage } = require("@fixo-baileyes");
+const { downloadContentFromMessage } = require("fixo-baileys");
 
 module.exports = {
   pattern: "save",
