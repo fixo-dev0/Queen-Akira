@@ -15,12 +15,12 @@ module.exports = {
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: "120363409660898486@newsletter",
-                        newsletterName: "????? ?????",
+                        newsletterName: "𝙌𝙪𝙚𝙚𝙣 𝘼𝙠𝙞𝙧𝙖",
                         serverMessageId: 200
                     },
                     externalAdReply: {
                         title: "🆔 JID Information",
-                        body: "????? ?????",
+                        body: "𝙌𝙪𝙚𝙚𝙣 𝘼𝙠𝙞𝙧𝙖",
                         thumbnailUrl: "https://files.catbox.moe/kwwaun.png", // Replace with your image URL
                         sourceUrl: "https://github.com/fixo-dev0",      // Replace with your repo link
                         mediaType: 1,
