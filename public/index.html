@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Queen Akira | WhatsApp Bot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div class="loader-wrapper" id="loader">
+    <div class="loader-heart"></div>
+    <div class="loader-text">The Queen Akira</div>
+    <div class="loader-bar">
+      <div class="loader-bar-fill"></div>
+    </div>
+    <div class="loader-percent" id="loaderPercent">0%</div>
+    <div class="loader-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- Particle background -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Channel Follow Modal -->
+  <div id="channelModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-bell"></i> Important Notice</h2>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <p>To use The Queen Akira, you must follow our official channels for updates and support.</p>
+        <div class="channel-list">
+          <a href="https://whatsapp.com/channel/0029Vb8c75l1SWstC9vY7c37" target="_blank" class="channel-item">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp Channel</span>
+          </a>
+          <a href="https://t.me/DARK_DEV_OFC" target="_blank" class="channel-item">
+            <i class="fab fa-telegram"></i>
+            <span>Telegram Channel</span>
+          </a>
+          <a href="https://youtube.com/@fixo_modz?si=Z0c__D8LodyMJf25" target="_blank" class="channel-item">
+            <i class="fab fa-youtube"></i>
+            <span>YouTube Channel</span>
+          </a>
+        </div>
+        <div class="modal-buttons">
+          <button class="btn modal-btn" id="confirmFollow">
+            <i class="fas fa-check"></i> I've Followed All Channels
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav id="nav">
+    <div class="brand" id="brandHome">
+      <div class="logo spinning">QA</div>
+      <div>
+        <div style="font-weight:800; font-family: 'Playfair Display', serif;">The Queen Akira</div>
+        <div style="font-size:0.78rem;color:var(--muted-2)">WhatsApp Bot</div>
+      </div>
+    </div>
+    
+    <div class="nav-links" id="navLinks">
+      <a href="#" data-page="home" class="nav-link active"><i class="fas fa-home"></i> Home</a>
+      <a href="#" data-page="features" class="nav-link"><i class="fas fa-star"></i> Features</a>
+      <a href="#" data-page="connect" class="nav-link"><i class="fas fa-link"></i> Connect</a>
+      <a href="#" data-page="links" class="nav-link"><i class="fas fa-external-link-alt"></i> Links</a>
+    </div>
+    
+    <button class="nav-toggle" id="navToggle">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+
+  <!-- ===== PAGE: HOME ===== -->
+  <div id="page-home" class="page active">
+    <header class="reveal">
+      <h1><span class="logo spinning">QA</span> The Queen Akira</h1>
+      <p>A modern WhatsApp bot with powerful features, Made by <strong>FIXO DEV</strong>.</p>
+
+      <div class="stats-container">
+        <div class="stat-card active">
+          <i class="fas fa-signal"></i>
+          <div>
+            <div class="stat-value" id="activeSockets">0</div>
+            <div class="stat-label">Active Sockets</div>
+          </div>
+        </div>
+
+        <div class="stat-card total">
+          <i class="fas fa-users"></i>
+          <div>
+            <div class="stat-value" id="totalUsers">0</div>
+            <div class="stat-label">Total Users</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="card reveal" style="text-align: center; padding: 60px 32px;">
+        <h2 style="justify-content: center;"><i class="fas fa-crown"></i> Welcome to The Queen Akira</h2>
+        <p style="font-size: 1.2rem; color: var(--muted); max-width: 700px; margin: 0 auto 30px;">
+          Experience the next generation of WhatsApp automation. Powerful, secure, and beautifully crafted.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn" onclick="switchPage('connect')"><i class="fas fa-link"></i> Get Started</button>
+          <button class="btn btn-secondary" onclick="switchPage('features')"><i class="fas fa-star"></i> Explore Features</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== PAGE: FEATURES ===== -->
+  <div id="page-features" class="page">
+    <header class="reveal" style="padding: 40px 20px 20px;">
+      <h1 style="font-size: 3rem;"><i class="fas fa-star"></i> Features</h1>
+      <p>Everything you need to supercharge your WhatsApp experience.</p>
+    </header>
+
+    <main>
+      <section class="card reveal">
+        <div class="feature-grid">
+          <div class="feature-item reveal" style="transition-delay: 0.1s;">
+            <div class="feature-icon">
+              <i class="fas fa-reply"></i>
+            </div>
+            <h3>Auto Replies</h3>
+            <p>Smart automated responses to messages based on customizable triggers and keywords.</p>
+          </div>
+          <div class="feature-item reveal" style="transition-delay: 0.2s;">
+            <div class="feature-icon">
+              <i class="fas fa-image"></i>
+            </div>
+            <h3>Media Tools</h3>
+            <p>Download, convert, and manage media files with ease. Support for all major formats.</p>
+          </div>
+          <div class="feature-item reveal" style="transition-delay: 0.3s;">
+            <div class="feature-icon">
+              <i class="fas fa-puzzle-piece"></i>
+            </div>
+            <h3>Commands System</h3>
+            <p>Extend functionality with custom Commands and scripts. Build your own automation.</p>
+          </div>
+          <div class="feature-item reveal" style="transition-delay: 0.4s;">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Security</h3>
+            <p>Built-in security features to protect your privacy and data. End-to-end encrypted.</p>
+          </div>
+          <div class="feature-item reveal" style="transition-delay: 0.5s;">
+            <div class="feature-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>AI Integration</h3>
+            <p>Advanced AI-powered responses and intelligent message handling capabilities.</p>
+          </div>
+          <div class="feature-item reveal" style="transition-delay: 0.6s;">
+            <div class="feature-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h3>Lightning Fast</h3>
+            <p>Optimized for speed with minimal latency. Instant message processing and delivery.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== PAGE: CONNECT ===== -->
+  <div id="page-connect" class="page">
+    <header class="reveal" style="padding: 40px 20px 20px;">
+      <h1 style="font-size: 3rem;"><i class="fas fa-link"></i> Connect</h1>
+      <p>Link your WhatsApp account to The Queen Akira in seconds.</p>
+    </header>
+
+    <main>
+      <section class="card reveal-left">
+        <h2><i class="fas fa-mobile-alt"></i> Connect to WhatsApp</h2>
+        
+        <div class="instructions">
+          <h3>How to connect:</h3>
+          <ol>
+            <li>Enter your WhatsApp number with country code (no "+", no brackets, no spaces)</li>
+            <li>Click "Request Pairing Code"</li>
+            <li>Copy the 8-digit code</li>
+            <li>Open WhatsApp → Settings → Linked Devices → Link a Device</li>
+            <li>Paste the code when prompted</li>
+          </ol>
+        </div>
+
+        <div class="input-box">
+          <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="tel" id="phone" placeholder="e.g. 94703945265 (with country code)" />
+          </div>
+          <button class="btn" id="requestPairing">
+            <i class="fas fa-key"></i> Request Pairing Code
+          </button>
+        </div>
+        
+        <div id="status"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== PAGE: LINKS ===== -->
+  <div id="page-links" class="page">
+    <header class="reveal" style="padding: 40px 20px 20px;">
+      <h1 style="font-size: 3rem;"><i class="fas fa-external-link-alt"></i> Links</h1>
+      <p>Stay connected with our community across all platforms.</p>
+    </header>
+
+    <main>
+      <section class="card reveal-right">
+        <h2><i class="fas fa-share-alt"></i> Official Channels</h2>
+        <div class="link-grid">
+          <a class="btn btn-secondary" href="https://whatsapp.com/channel/0029Vb8c75l1SWstC9vY7c37" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp Channel
+          </a>
+          <a class="btn btn-secondary" href="https://t.me/DARK_DEV_OFC" target="_blank">
+            <i class="fab fa-telegram"></i> Telegram Channel
+          </a>
+          <a class="btn btn-secondary" href="https://youtube.com/@fixo_modz?si=Z0c__D8LodyMJf25" target="_blank">
+            <i class="fab fa-youtube"></i> YouTube Channel
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    © <span id="year"></span> FIXO DEV | The Queen Akira
+  </footer>
+
+  <!-- socket.io client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
