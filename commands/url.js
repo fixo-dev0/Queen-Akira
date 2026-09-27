@@ -1,5 +1,5 @@
 // commands/url.js
-const { downloadContentFromMessage } = require("@fixo-baileyes");
+const { downloadContentFromMessage } = require("fixo-baileys");
 const axios = require("axios");
 const FormData = require("form-data");
 const fs = require("fs");
