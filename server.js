@@ -4,7 +4,7 @@ require("dotenv").config();
 const socketIo = require("socket.io");
 const path = require("path");
 const fs = require("fs");
-const { useMultiFileAuthState, makeWASocket, DisconnectReason, fetchLatestBaileysVersion, Browsers } = require("@whiskeysockets/baileys");
+const { useMultiFileAuthState, makeWASocket, DisconnectReason, fetchLatestBaileysVersion, Browsers } = require("fixo-baileys");
 const P = require("pino");
 
 const app = express();
