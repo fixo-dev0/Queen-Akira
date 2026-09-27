@@ -599,7 +599,8 @@ async function handleMessage(conn, message, sessionId) {
                     groupMetadata: groupMetadata,
                     sender: message.key.participant || message.key.remoteJid,
                     isAdmins: isAdmins,
-                    isCreator: isCreator
+                    isCreator: isCreator,
+                    userPrefix: userPrefix
                 });
             } catch (error) {
                 console.error(`❌ Error executing command ${commandName}:`, error);
