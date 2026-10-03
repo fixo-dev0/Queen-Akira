@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👑 QUEEN AKIRA MINI 👑</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* ===============================
+   THEME: QUEEN AKIRA (CYBERPUNK NEON)
+=============================== */
+
+:root {
+    --neon-red: #ff003c;
+    --neon-pink: #ff2a6d;
+    --dark-bg: #030005;
+    --glass-bg: rgba(15, 0, 10, 0.6);
+    --glass-border: rgba(255, 0, 60, 0.3);
+    --glow: 0 0 20px rgba(255, 0, 60, 0.6);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--dark-bg);
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Animated Cyberpunk Grid Background */
+.bg-grid {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: 
+        linear-gradient(rgba(255, 0, 60, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 60, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    transform: perspective(500px) rotateX(60deg);
+    animation: gridMove 20s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes gridMove {
+    0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(60deg) translateY(40px); }
+}
+
+/* Glowing Orbs */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    opacity: 0.4;
+    animation: floatOrb 10s infinite alternate ease-in-out;
+}
+
+.orb-1 {
+    width: 250px;
+    height: 250px;
+    background: var(--neon-red);
+    top: -50px;
+    left: -50px;
+}
+
+.orb-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--neon-pink);
+    bottom: -100px;
+    right: -100px;
+    animation-delay: -5s;
+}
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 40px) scale(1.2); }
+}
+
+/* ===============================
+   LOADING SCREEN (PREMIUM)
+=============================== */
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease, visibility 0.6s;
+}
+
+.loader-crown {
+    font-size: 3.5rem;
+    color: var(--neon-red);
+    text-shadow: 0 0 20px var(--neon-red), 0 0 50px var(--neon-pink);
+    animation: pulseCrown 1.5s infinite alternate;
+    margin-bottom: 20px;
+}
+
+@keyframes pulseCrown {
+    0% { transform: scale(1); opacity: 0.7; filter: drop-shadow(0 0 10px var(--neon-red)); }
+    100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 30px var(--neon-pink)); }
+}
+
+.loader-ring {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--neon-red);
+    border-bottom-color: var(--neon-pink);
+    animation: spin 1.5s linear infinite;
+}
+
+.loader-ring::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-left-color: var(--neon-red);
+    border-right-color: var(--neon-pink);
+    animation: spin 2s linear infinite reverse;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader-text {
+    margin-top: 25px;
+    font-size: 0.8rem;
+    letter-spacing: 5px;
+    color: var(--neon-red);
+    font-family: 'Orbitron', sans-serif;
+    animation: blinkText 1.5s infinite;
+}
+
+@keyframes blinkText {
+    0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-red); }
+    50% { opacity: 0.3; text-shadow: none; }
+}
+
+/* ===============================
+   MAIN CARD (GLASSMORPHISM)
+=============================== */
+.card {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 420px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 35px 25px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+        0 0 40px rgba(255, 0, 60, 0.15),
+        inset 0 0 20px rgba(255, 0, 60, 0.05);
+    animation: cardEntry 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transform: translateY(30px);
+    opacity: 0;
+}
+
+@keyframes cardEntry {
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Headings with Glitch Effect */
+.title-wrapper {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+h1.main-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-pink);
+    position: relative;
+    z-index: 2;
+}
+
+h1.main-title::before, h1.main-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+h1.main-title::before {
+    color: var(--neon-red);
+    animation: glitch 3s infinite linear alternate-reverse;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+h1.main-title::after {
+    color: var(--neon-pink);
+    animation: glitch 2s infinite linear alternate-reverse;
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 1px); }
+    40% { transform: translate(-1px, -1px); }
+    60% { transform: translate(2px, 1px); }
+    80% { transform: translate(1px, -1px); }
+    100% { transform: translate(0); }
+}
+
+h1.sub-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 5px;
+    color: var(--neon-red);
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+}
+
+/* Status Text */
+.status {
+    font-size: 0.7rem;
+    color: #888;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* ===============================
+   INPUT & BUTTON (CYBERPUNK)
+=============================== */
+.input-container {
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0a0005;
+    border: 1px solid rgba(255, 0, 60, 0.3);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+/* Scanner Line Animation */
+.input-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+    animation: scanLine 3s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { top: 0; left: -100%; }
+    50% { left: 100%; }
+    100% { top: 100%; left: -100%; }
+}
+
+input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 18px;
+    background: transparent;
+    color: #fff;
+    text-align: center;
+    font-size: 1.1rem;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+input::placeholder {
+    color: #444;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+input:focus {
+    background: rgba(255, 0, 60, 0.05);
+}
+
+/* Button */
+.btn-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 2px;
+    background: linear-gradient(90deg, var(--neon-red), var(--neon-pink), var(--neon-red));
+    background-size: 200% 100%;
+    animation: borderGlow 3s linear infinite;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+@keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.btn-container:active {
+    transform: scale(0.98);
+}
+
+button {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: #0a0005;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.3), transparent);
+    transition: 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    background: rgba(255, 0, 60, 0.1);
+    text-shadow: 0 0 10px var(--neon-red);
+}
+
+/* Result Box */
+.result-box {
+    width: 100%;
+    margin-top: 25px;
+    padding: 2px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, var(--neon-red), var(--neon-pink), var(--neon-red));
+    background-size: 200% 100%;
+    animation: borderGlow 3s linear infinite;
+    display: none;
+    box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+}
+
+.result-inner {
+    background: #0a0005;
+    border-radius: 10px;
+    padding: 18px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    word-break: break-all;
+    transition: all 0.3s ease;
+}
+
+/* Loading State inside Result Box */
+.loading-state {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--neon-red);
+    font-family: 'Poppins', sans-serif;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 0, 60, 0.2);
+    border-top: 2px solid var(--neon-red);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Footer */
+footer {
+    margin-top: 25px;
+    font-size: 0.6rem;
+    color: #555;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Animations for Result Box */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+</style>
+</head>
+<body>
+
+<!-- Background Elements -->
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- Loading Screen -->
+<div id="loader-wrapper">
+    <div class="loader-crown">👑</div>
+    <div class="loader-ring"></div>
+    <div class="loader-text">SYSTEM INITIALIZING</div>
+</div>
+
+<!-- Main Card -->
+<div class="card">
+    <div class="title-wrapper">
+        <h1 class="main-title" data-text="QUEEN AKIRA">QUEEN AKIRA</h1>
+    </div>
+    <h1 class="sub-title">PAIR CODE</h1>
+    
+    <p class="status">TYPE YOUR WHATSAPP NUMBER</p>
+    
+    <div class="input-container">
+        <input type="text" id="number" placeholder="947XXXXXXXX" maxlength="15">
+    </div>
+
+    <div class="btn-container">
+        <button onclick="getCode()">GET PAIR CODE</button>
+    </div>
+
+    <!-- Result Box (Hidden by default) -->
+    <div class="result-box" id="resultBox">
+        <div class="result-inner" id="codeBox">
+            <!-- Code or Error will appear here -->
+        </div>
+    </div>
+
+    <footer>
+        QUEEN AKIRA MINI BOT EDITION 2026
+    </footer>
+</div>
+
+<script>
+    // Hide Loader when page is fully loaded
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader-wrapper');
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.visibility = 'hidden';
+            }, 600);
+        }, 2000); // 2 seconds loading time for dramatic effect
+    });
+
+    async function getCode() {
+        const numInput = document.getElementById("number");
+        const num = numInput.value.replace(/[^0-9]/g, '');
+        const resultBox = document.getElementById("resultBox");
+        const codeBox = document.getElementById("codeBox");
+
+        // Show result box with animation
+        resultBox.style.display = "block";
+        resultBox.classList.remove("fade-in");
+        void resultBox.offsetWidth; // Trigger reflow
+        resultBox.classList.add("fade-in");
+
+        // Validation
+        if (!num || num.length < 10) {
+            codeBox.innerHTML = `<span style="color: #ff4d4d; letter-spacing: 1px;">INVALID NUMBER</span>`;
+            return;
+        }
+
+        // Loading State
+        codeBox.innerHTML = `
+            <div class="loading-state">
+                <div class="spinner"></div>
+                CONNECTING...
+            </div>
+        `;
+
+        try {
+            const res = await fetch(`/code?number=${num}`);
+            const data = await res.json();
+            
+            if (data.code) {
+                codeBox.style.letterSpacing = "4px";
+                codeBox.style.color = "#fff";
+                codeBox.innerText = data.code;
+            } else {
+                codeBox.innerHTML = `<span style="color: #ff4d4d; letter-spacing: 1px;">SERVER FULL</span>`;
+            }
+        } catch (e) {
+            codeBox.innerHTML = `<span style="color: #ff4d4d; letter-spacing: 1px;">SERVER ERROR</span>`;
+        }
+    }
+
+    // Allow Enter key to trigger getCode
+    document.getElementById("number").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            getCode();
+        }
+    });
+</script>
+
+</body>
+</html>
