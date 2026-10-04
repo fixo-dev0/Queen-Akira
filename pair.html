@@ -10,15 +10,15 @@
 <style>
 /* ===============================
    THEME: QUEEN AKIRA (CYBERPUNK NEON)
+   ONLY 2 COLORS: CYAN + PURPLE
 =============================== */
 
 :root {
-    --neon-red: #ff003c;
-    --neon-pink: #ff2a6d;
-    --dark-bg: #030005;
-    --glass-bg: rgba(15, 0, 10, 0.6);
-    --glass-border: rgba(255, 0, 60, 0.3);
-    --glow: 0 0 20px rgba(255, 0, 60, 0.6);
+    --neon-cyan: #00f0ff;
+    --neon-purple: #b026ff;
+    --dark-bg: #05010f;
+    --glass-bg: rgba(10, 0, 25, 0.6);
+    --glass-border: rgba(0, 240, 255, 0.3);
 }
 
 * {
@@ -29,28 +29,35 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Poppins', sans-serif;
     background-color: var(--dark-bg);
     color: #fff;
-    overflow: hidden;
     position: relative;
+    padding: 20px 0;
 }
 
 /* Animated Cyberpunk Grid Background */
 .bg-grid {
-    position: absolute;
+    position: fixed;
     top: -50%;
     left: -50%;
     width: 200%;
     height: 200%;
     background-image: 
-        linear-gradient(rgba(255, 0, 60, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 0, 60, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(176, 38, 255, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
     transform: perspective(500px) rotateX(60deg);
     animation: gridMove 20s linear infinite;
@@ -65,18 +72,19 @@ body {
 
 /* Glowing Orbs */
 .orb {
-    position: absolute;
+    position: fixed;
     border-radius: 50%;
     filter: blur(80px);
     z-index: 1;
-    opacity: 0.4;
+    opacity: 0.45;
     animation: floatOrb 10s infinite alternate ease-in-out;
+    pointer-events: none;
 }
 
 .orb-1 {
     width: 250px;
     height: 250px;
-    background: var(--neon-red);
+    background: var(--neon-cyan);
     top: -50px;
     left: -50px;
 }
@@ -84,7 +92,7 @@ body {
 .orb-2 {
     width: 300px;
     height: 300px;
-    background: var(--neon-pink);
+    background: var(--neon-purple);
     bottom: -100px;
     right: -100px;
     animation-delay: -5s;
@@ -96,34 +104,41 @@ body {
 }
 
 /* ===============================
-   LOADING SCREEN (PREMIUM)
+   LOADING SCREEN (FIXED CENTERING)
 =============================== */
 #loader-wrapper {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     background: #000;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
     z-index: 9999;
     transition: opacity 0.6s ease, visibility 0.6s;
+    overflow: hidden;
 }
 
 .loader-crown {
     font-size: 3.5rem;
-    color: var(--neon-red);
-    text-shadow: 0 0 20px var(--neon-red), 0 0 50px var(--neon-pink);
+    color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan), 0 0 50px var(--neon-purple);
     animation: pulseCrown 1.5s infinite alternate;
     margin-bottom: 20px;
+    display: block;
+    line-height: 1;
 }
 
 @keyframes pulseCrown {
-    0% { transform: scale(1); opacity: 0.7; filter: drop-shadow(0 0 10px var(--neon-red)); }
-    100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 30px var(--neon-pink)); }
+    0% { transform: scale(1); opacity: 0.7; filter: drop-shadow(0 0 10px var(--neon-cyan)); }
+    100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 30px var(--neon-purple)); }
 }
 
 .loader-ring {
@@ -132,9 +147,11 @@ body {
     height: 80px;
     border-radius: 50%;
     border: 3px solid transparent;
-    border-top-color: var(--neon-red);
-    border-bottom-color: var(--neon-pink);
+    border-top-color: var(--neon-cyan);
+    border-bottom-color: var(--neon-purple);
     animation: spin 1.5s linear infinite;
+    margin: 0 auto;
+    flex-shrink: 0;
 }
 
 .loader-ring::before {
@@ -146,8 +163,8 @@ body {
     bottom: 5px;
     border-radius: 50%;
     border: 3px solid transparent;
-    border-left-color: var(--neon-red);
-    border-right-color: var(--neon-pink);
+    border-left-color: var(--neon-cyan);
+    border-right-color: var(--neon-purple);
     animation: spin 2s linear infinite reverse;
 }
 
@@ -160,13 +177,16 @@ body {
     margin-top: 25px;
     font-size: 0.8rem;
     letter-spacing: 5px;
-    color: var(--neon-red);
+    color: var(--neon-cyan);
     font-family: 'Orbitron', sans-serif;
     animation: blinkText 1.5s infinite;
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 
 @keyframes blinkText {
-    0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-red); }
+    0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--neon-cyan); }
     50% { opacity: 0.3; text-shadow: none; }
 }
 
@@ -186,8 +206,8 @@ body {
     text-align: center;
     border: 1px solid var(--glass-border);
     box-shadow: 
-        0 0 40px rgba(255, 0, 60, 0.15),
-        inset 0 0 20px rgba(255, 0, 60, 0.05);
+        0 0 40px rgba(0, 240, 255, 0.15),
+        inset 0 0 20px rgba(176, 38, 255, 0.05);
     animation: cardEntry 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     transform: translateY(30px);
     opacity: 0;
@@ -209,7 +229,7 @@ h1.main-title {
     font-weight: 900;
     letter-spacing: 3px;
     color: #fff;
-    text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-purple);
     position: relative;
     z-index: 2;
 }
@@ -225,13 +245,13 @@ h1.main-title::before, h1.main-title::after {
 }
 
 h1.main-title::before {
-    color: var(--neon-red);
+    color: var(--neon-cyan);
     animation: glitch 3s infinite linear alternate-reverse;
     clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 
 h1.main-title::after {
-    color: var(--neon-pink);
+    color: var(--neon-purple);
     animation: glitch 2s infinite linear alternate-reverse;
     clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
 }
@@ -250,9 +270,9 @@ h1.sub-title {
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 5px;
-    color: var(--neon-red);
+    color: var(--neon-cyan);
     margin-bottom: 25px;
-    text-shadow: 0 0 10px rgba(255, 0, 60, 0.5);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
 /* Status Text */
@@ -273,12 +293,11 @@ h1.sub-title {
     margin-bottom: 20px;
     border-radius: 12px;
     overflow: hidden;
-    background: #0a0005;
-    border: 1px solid rgba(255, 0, 60, 0.3);
+    background: #05010f;
+    border: 1px solid rgba(0, 240, 255, 0.3);
     box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
-/* Scanner Line Animation */
 .input-container::before {
     content: '';
     position: absolute;
@@ -286,7 +305,7 @@ h1.sub-title {
     left: -100%;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
     animation: scanLine 3s linear infinite;
 }
 
@@ -318,7 +337,7 @@ input::placeholder {
 }
 
 input:focus {
-    background: rgba(255, 0, 60, 0.05);
+    background: rgba(0, 240, 255, 0.05);
 }
 
 /* Button */
@@ -327,7 +346,7 @@ input:focus {
     border-radius: 12px;
     overflow: hidden;
     padding: 2px;
-    background: linear-gradient(90deg, var(--neon-red), var(--neon-pink), var(--neon-red));
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-cyan));
     background-size: 200% 100%;
     animation: borderGlow 3s linear infinite;
     cursor: pointer;
@@ -354,7 +373,7 @@ button {
     letter-spacing: 3px;
     text-transform: uppercase;
     cursor: pointer;
-    background: #0a0005;
+    background: #05010f;
     color: #fff;
     font-family: 'Orbitron', sans-serif;
     transition: all 0.3s ease;
@@ -369,7 +388,7 @@ button::before {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 0, 60, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
     transition: 0.5s;
 }
 
@@ -378,8 +397,8 @@ button:hover::before {
 }
 
 button:hover {
-    background: rgba(255, 0, 60, 0.1);
-    text-shadow: 0 0 10px var(--neon-red);
+    background: rgba(0, 240, 255, 0.1);
+    text-shadow: 0 0 10px var(--neon-cyan);
 }
 
 /* Result Box */
@@ -388,17 +407,17 @@ button:hover {
     margin-top: 25px;
     padding: 2px;
     border-radius: 12px;
-    background: linear-gradient(90deg, var(--neon-red), var(--neon-pink), var(--neon-red));
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-cyan));
     background-size: 200% 100%;
     animation: borderGlow 3s linear infinite;
     display: none;
-    box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
 }
 
 .result-inner {
-    background: #0a0005;
+    background: #05010f;
     border-radius: 10px;
-    padding: 18px;
+    padding: 18px 12px;
     min-height: 60px;
     display: flex;
     align-items: center;
@@ -410,6 +429,46 @@ button:hover {
     font-family: 'Orbitron', sans-serif;
     word-break: break-all;
     transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* Copy Button */
+.copy-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--neon-cyan);
+    background: rgba(0, 240, 255, 0.08);
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.copy-btn:hover {
+    background: rgba(0, 240, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.copy-btn:active {
+    transform: scale(0.97);
+}
+
+.copy-btn.copied {
+    border-color: var(--neon-purple);
+    color: var(--neon-purple);
+    background: rgba(176, 38, 255, 0.15);
+    box-shadow: 0 0 20px rgba(176, 38, 255, 0.5);
 }
 
 /* Loading State inside Result Box */
@@ -419,15 +478,15 @@ button:hover {
     gap: 10px;
     font-size: 0.8rem;
     letter-spacing: 2px;
-    color: var(--neon-red);
+    color: var(--neon-cyan);
     font-family: 'Poppins', sans-serif;
 }
 
 .spinner {
     width: 18px;
     height: 18px;
-    border: 2px solid rgba(255, 0, 60, 0.2);
-    border-top: 2px solid var(--neon-red);
+    border: 2px solid rgba(0, 240, 255, 0.2);
+    border-top: 2px solid var(--neon-cyan);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -442,6 +501,33 @@ footer {
     font-family: 'Orbitron', sans-serif;
 }
 
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 99999;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
 /* Animations for Result Box */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -450,6 +536,16 @@ footer {
 
 .fade-in {
     animation: fadeIn 0.5s ease forwards;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    h1.main-title { font-size: 1.6rem; }
+    h1.sub-title { font-size: 0.95rem; letter-spacing: 4px; }
+    .card { padding: 28px 18px; }
+    .loader-crown { font-size: 3rem; }
+    .loader-ring { width: 70px; height: 70px; }
+    .loader-text { font-size: 0.7rem; letter-spacing: 4px; }
 }
 </style>
 </head>
@@ -477,7 +573,7 @@ footer {
     <p class="status">TYPE YOUR WHATSAPP NUMBER</p>
     
     <div class="input-container">
-        <input type="text" id="number" placeholder="947XXXXXXXX" maxlength="15">
+        <input type="text" id="number" placeholder="947XXXXXXXX" maxlength="15" inputmode="numeric">
     </div>
 
     <div class="btn-container">
@@ -491,12 +587,24 @@ footer {
         </div>
     </div>
 
+    <!-- Copy Button -->
+    <button class="copy-btn" id="copyBtn" onclick="copyCode()">
+        <span id="copyIcon">📋</span>
+        <span id="copyText">COPY CODE</span>
+    </button>
+
     <footer>
         QUEEN AKIRA MINI BOT EDITION 2026
     </footer>
 </div>
 
+<!-- Toast Notification -->
+<div class="toast" id="toast">✓ CODE COPIED!</div>
+
 <script>
+    // Store the current code
+    let currentCode = "";
+
     // Hide Loader when page is fully loaded
     window.addEventListener('load', () => {
         const loader = document.getElementById('loader-wrapper');
@@ -504,8 +612,9 @@ footer {
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.visibility = 'hidden';
+                loader.style.display = 'none';
             }, 600);
-        }, 2000); // 2 seconds loading time for dramatic effect
+        }, 2000);
     });
 
     async function getCode() {
@@ -513,16 +622,24 @@ footer {
         const num = numInput.value.replace(/[^0-9]/g, '');
         const resultBox = document.getElementById("resultBox");
         const codeBox = document.getElementById("codeBox");
+        const copyBtn = document.getElementById("copyBtn");
+
+        // Reset copy button
+        copyBtn.style.display = "none";
+        copyBtn.classList.remove("copied");
+        document.getElementById("copyIcon").textContent = "📋";
+        document.getElementById("copyText").textContent = "COPY CODE";
+        currentCode = "";
 
         // Show result box with animation
         resultBox.style.display = "block";
         resultBox.classList.remove("fade-in");
-        void resultBox.offsetWidth; // Trigger reflow
+        void resultBox.offsetWidth;
         resultBox.classList.add("fade-in");
 
         // Validation
         if (!num || num.length < 10) {
-            codeBox.innerHTML = `<span style="color: #ff4d4d; letter-spacing: 1px;">INVALID NUMBER</span>`;
+            codeBox.innerHTML = `<span style="color: #b026ff; letter-spacing: 1px;">INVALID NUMBER</span>`;
             return;
         }
 
@@ -539,18 +656,71 @@ footer {
             const data = await res.json();
             
             if (data.code) {
+                currentCode = data.code;
                 codeBox.style.letterSpacing = "4px";
                 codeBox.style.color = "#fff";
                 codeBox.innerText = data.code;
+                
+                // Show copy button
+                setTimeout(() => {
+                    copyBtn.style.display = "flex";
+                }, 300);
             } else {
-                codeBox.innerHTML = `<span style="color: #ff4d4d; letter-spacing: 1px;">SERVER FULL</span>`;
+                codeBox.innerHTML = `<span style="color: #b026ff; letter-spacing: 1px;">SERVER FULL</span>`;
             }
         } catch (e) {
-            codeBox.innerHTML = `<span style="color: #ff4d4d; letter-spacing: 1px;">SERVER ERROR</span>`;
+            codeBox.innerHTML = `<span style="color: #b026ff; letter-spacing: 1px;">SERVER ERROR</span>`;
         }
     }
 
-    // Allow Enter key to trigger getCode
+    // Copy Code Function
+    async function copyCode() {
+        if (!currentCode) return;
+
+        const copyBtn = document.getElementById("copyBtn");
+        const copyIcon = document.getElementById("copyIcon");
+        const copyText = document.getElementById("copyText");
+        const toast = document.getElementById("toast");
+
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(currentCode);
+            } else {
+                const textarea = document.createElement("textarea");
+                textarea.value = currentCode;
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+                textarea.style.left = "-9999px";
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+            }
+
+            copyBtn.classList.add("copied");
+            copyIcon.textContent = "✓";
+            copyText.textContent = "COPIED!";
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2000);
+
+            setTimeout(() => {
+                copyBtn.classList.remove("copied");
+                copyIcon.textContent = "📋";
+                copyText.textContent = "COPY CODE";
+            }, 2500);
+
+        } catch (err) {
+            copyText.textContent = "FAILED!";
+            setTimeout(() => {
+                copyText.textContent = "COPY CODE";
+            }, 2000);
+        }
+    }
+
     document.getElementById("number").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             event.preventDefault();
@@ -560,4 +730,4 @@ footer {
 </script>
 
 </body>
-</html>
+   </html>
