@@ -1,7 +1,6 @@
 const { cmd, commands } = require("../arslan");
 const moment = require("moment-timezone");
 const config = require("../config");
-const { fakevCard } = require('../lib/fakevCard');
 
 // Card image per category (falls back to the default image). Put your own banners here.
 const CATEGORY_IMAGES = {
@@ -79,49 +78,30 @@ cmd({
         },
     };
 
+    // Build one card per category (WhatsApp allows max 10 cards in one carousel)
+    const cats = Object.keys(grouped).sort().slice(0, 10);
+    const cards = cats.map(cat => ({
+        image: CATEGORY_IMAGES[cat] || DEFAULT_IMAGE,
+        title: `${CATEGORY_ICONS[cat] || "✨"} ${cat.toUpperCase()} MENU`,
+        body: grouped[cat].sort().map(p => `• ${prefix}${p}`).join("\n"),
+        footer: `${BOT} • ${grouped[cat].length} cmds`,
+        buttons: [{ id: `${prefix}menu`, text: "🏠 MAIN MENU" }],
+    }));
+
+    // fixo-baileys' own carousel sender (it adds the "business" part WhatsApp needs).
+    // NOTE: argument shape below must match fixo-baileys' sendCarouselMenu signature.
+    const sendCarouselMenu =
+        typeof conn.sendCarouselMenu === "function"
+            ? conn.sendCarouselMenu.bind(conn)
+            : typeof global.baileys.sendCarouselMenu === "function"
+                ? (...args) => global.baileys.sendCarouselMenu(conn, ...args)
+                : null;
+
     try {
-        const { generateWAMessageFromContent, prepareWAMessageMedia } = global.baileys;
-
-        // WhatsApp allows max 10 cards in one carousel
-        const cats = Object.keys(grouped).sort().slice(0, 10);
-        const cards = [];
-        for (const cat of cats) {
-            const media = await prepareWAMessageMedia(
-                { image: { url: CATEGORY_IMAGES[cat] || DEFAULT_IMAGE } },
-                { upload: conn.waUploadToServer }
-            );
-            const list = grouped[cat].sort().map(p => `• ${prefix}${p}`).join("\n");
-            cards.push({
-                header: { ...media, title: "", hasMediaAttachment: true },
-                body: { text: `${CATEGORY_ICONS[cat] || "✨"} *${cat.toUpperCase()} MENU*\n\n${list}` },
-                footer: { text: `${BOT} • ${grouped[cat].length} cmds` },
-                nativeFlowMessage: {
-                    buttons: [{
-                        name: "quick_reply",
-                        buttonParamsJson: JSON.stringify({ display_text: "🏠 MAIN MENU", id: `${prefix}menu` }),
-                    }],
-                },
-            });
-        }
-
-        const msg = generateWAMessageFromContent(m.chat, {
-            viewOnceMessage: {
-                message: {
-                    messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
-                    interactiveMessage: {
-                        body: { text: header },
-                        footer: { text: `${BOT} • POWERED BY FIXO-BAILEYS` },
-                        header: { hasMediaAttachment: false },
-                        carouselMessage: { cards, messageVersion: 1 },
-                        contextInfo,
-                    },
-                },
-            },
-        }, { userJid: conn.user.id, quoted: fakevCard });
-
-        await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+        if (!sendCarouselMenu) throw new Error("sendCarouselMenu not found in fixo-baileys");
+        await sendCarouselMenu(m.chat, { text: header, footer: `${BOT} • POWERED BY FIXO-BAILEYS`, cards, contextInfo }, { quoted: mek });
     } catch (err) {
-        // Fallback: plain image + text menu if cards are not supported
+        // Fallback: plain image + text menu
         console.error("Carousel menu failed, using text menu:", err && err.message);
         try {
             let text = header + "\n";
@@ -129,7 +109,7 @@ cmd({
                 text += `\n${CATEGORY_ICONS[cat] || "✨"} *${cat.toUpperCase()} MENU*\n`;
                 text += grouped[cat].sort().map(p => `• ${prefix}${p}`).join("\n") + "\n";
             }
-            await conn.sendMessage(m.chat, { image: { url: DEFAULT_IMAGE }, caption: text.trim(), contextInfo }, { quoted: fakevCard });
+            await conn.sendMessage(m.chat, { image: { url: DEFAULT_IMAGE }, caption: text.trim(), contextInfo }, { quoted: mek });
         } catch (e) {
             console.error("AllMenu Error:", e);
             reply("❌ Error while generating menu.");
