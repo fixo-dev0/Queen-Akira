@@ -9,7 +9,7 @@ const {
     jidDecode,
     downloadContentFromMessage,
     getContentType,
-} = require('@whiskeysockets/baileys');
+} = require('fixo-baileys');
 const { arslanmd } = require('./lib/system');
 const config = require('./config');
 const events = require('./arslan');
